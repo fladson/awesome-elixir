@@ -1,8 +1,13 @@
 language: elixir
-
-# Using faster container based build environment.
-sudo: false
-
-before_install: cd ./tests
-
-script: mix run check.exs
+before_install:
+  - cd ./tests
+before_script:
+  - allowed_dupes=credo,edn-format,getsentry
+  - allowed_redirects=vk,weibo
+script:
+  - mix run check.exs
+after_success:
+  - cd -
+  - rvm use 2.2
+  - gem install awesome_bot
+  - awesome_bot README.md -w $allowed_dupes,$allowed_redirects
